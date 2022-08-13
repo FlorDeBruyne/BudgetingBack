@@ -42,7 +42,7 @@ const category = [
 	},
 	{
 		id: 7,
-		name: "Daving, Investing & Debt Payments",
+		name: "Saving, Investing & Debt Payments",
 	},
 	{
 		id: 8,

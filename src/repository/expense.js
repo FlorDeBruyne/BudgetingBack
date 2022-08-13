@@ -1,25 +1,25 @@
 const { tables, getKnex } = require("../data/index");
-const getConsoleLogger = require("get-logger/lib/getConsoleLogger");
+const { getChildLogger } = require("../core/logger");
 const uuid = require("uuid");
-const { place } = require("../data/mock_data");
 
-const formatExpense = ({
-	placeId,
-	placeName,
-	categoryId,
-	categoryName,
-	...rest
-}) => ({
-	...rest,
-	place: {
-		id: placeId,
-		name: placeName,
-	},
-	category: {
-		id: categoryId,
-		name: categoryName,
-	},
-});
+
+// const formatExpense = ({
+// 	placeId,
+// 	placeName,
+// 	categoryId,
+// 	categoryName,
+// 	...rest
+// }) => ({
+// 	...rest,
+// 	place: {
+// 		id: placeId,
+// 		name: placeName,
+// 	},
+// 	category: {
+// 		id: categoryId,
+// 		name: categoryName,
+// 	},
+// });
 
 const SELECT_COLUMS = [
 	`${tables.expense}.id`,
@@ -41,7 +41,7 @@ const findAll = ({ limit, offset }) => {
 };
 
 const findById = async (id) => {
-	const expense = await getKnex()(tables.expense)
+	return await getKnex()(tables.expense)
 		.join(
 			`${tables.place}`,
 			`${tables.place}.id`,
@@ -56,8 +56,15 @@ const findById = async (id) => {
 		)
 		.where("id", id)
 		.first(SELECT_COLUMS);
+};
 
-	return expense && formatExpense(expense);
+const findByName = async (name) => {
+	return await getKnex()(tables.expense).where("name", name).firt();
+};
+
+const findCount = async () => {
+	const [count] = await getKnex()(tables.expense).count();
+	return count["count(*)"];
 };
 
 const create = async ({ amount, name, categoryId, date, placeId }) => {
@@ -73,7 +80,40 @@ const create = async ({ amount, name, categoryId, date, placeId }) => {
 		});
 		return await findById(id);
 	} catch (error) {
-		getConsoleLogger.error("Error in create", { error });
+		const logger = getChildLogger("expense-repo");
+		logger.error("Error in create", { error });
+		throw error;
+	}
+};
+
+const updateById = async (id, { amount, name, categoryId, date, placeId }) => {
+	try {
+		await getKnex()(tables.expense)
+			.update({
+				amount,
+				name,
+				categoryId,
+				date,
+				placeId,
+			})
+			.where("id", id);
+	} catch (error) {
+		const logger = getChildLogger("expense-repo");
+		logger.error("Error in updateById", { error });
+		throw error;
+	}
+};
+
+const deleteById = async (id) => {
+	try {
+		const rowAffected = await getKnex()(tables.expense)
+			.delete()
+			.where("id", id);
+
+		return rowAffected > 0;
+	} catch (error) {
+		const logger = getChildLogger("expense-repo");
+		logger.error("Error in deleteById", { error });
 		throw error;
 	}
 };
@@ -81,7 +121,9 @@ const create = async ({ amount, name, categoryId, date, placeId }) => {
 module.exports = {
 	findAll,
 	findById,
+	findByName,
+	findCount,
 	create,
-	// updateById,
-	// deleteById,
+	updateById,
+	deleteById,
 };

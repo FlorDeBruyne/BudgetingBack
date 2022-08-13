@@ -1,11 +1,12 @@
 const Koa = require("koa");
 const koaCors = require("@koa/cors");
 const config = require("config");
-const getConsoleLogger = require("get-logger/lib/getConsoleLogger");
+const { getLogger, initializeLogger } = require("./core/logger");
 const bodyParser = require("koa-bodyparser");
 const Router = require("@koa/router");
 const ExpenseService = require("./service/expense");
 const { initializeData } = require("./data");
+const createServer = require("./createServer");
 
 const NODE_ENV = process.env.NODE_ENV; // config.get("env") doesn't work
 const LOG_LEVEL = config.get("log.level");
@@ -14,10 +15,10 @@ const CORS_ORIGINS = config.get("cors.origins");
 const CORS_MAX_AGE = config.get("cors.maxAge");
 
 const app = new Koa();
-const logger = getConsoleLogger();
 const router = new Router();
 
 async function main() {
+	const server = createServer();
 	await initializeData();
 
 	app.use(bodyParser());

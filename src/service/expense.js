@@ -1,57 +1,33 @@
-const uuid = require("uuid");
-const getConsoleLogger = require("get-logger/lib/getConsoleLogger");
-const { loggers } = require("winston");
-let { EXPENSE, PLACE } = require("../data/mock_data");
+const expenseRepository = require("../repository/expense");
 
-const getAll = () => {
-	return { data: EXPENSE, count: EXPENSE.length };
+const getAll = async (limit = 100, offset = 1) => {
+	const data = await expenseRepository.findAll({ limit, offset });
+	const count = await expenseRepository.findCount();
+	return {
+		data,
+		count,
+		limit,
+		offset,
+	};
 };
 
 const getById = (id) => {
-	existing(id);
-	return { data: EXPENSE.filter((x) => x.id == id) };
+	return expenseRepository.findById(id);
 };
 
-const create = (id, { amount, name, categoryId, date, placeId }) => {
-	existing(placeId);
-
-	if (typeof name === "string") {
-		name = { id: uuid.v4(), name: name };
-	}
-
-	newExpense = {
-		id: uuid.v4(),
-		amount: amount,
-		name: name,
-		categoryId: categoryId,
-		date: date.toISOString(),
-		placeId: placeId,
-	};
-	EXPENSE = [...EXPENSE, newExpense];
-	return newExpense;
+const create = ({ amount, name, categoryId, date, placeId }) => {
+	// const {id: userId} = await userService.register({name: user})
+	return expenseRepository.create({ amount, name, categoryId, date, placeId });
 };
 
 const updateById = (id, { amount, name, categoryId, date, placeId }) => {
-	EXPENSE.filter((expense) => expense.id === id).forEach(
-		(expense) => (expense = { amount, name, categoryId, date, placeId })
-	);
+	const updateExpense = { amount, name, categoryId, date, placeId };
+	
+	return expenseRepository.updateById(id, updateExpense);
 };
 
-const deleteById = (id) => {
-	EXPENSE.filter((x) => x.id == id).remove();
-};
-
-const existing = (id, kind) => {
-	let existing;
-	if (id) {
-		existing = kind.filter((x) => x.id === id);
-
-		if (!existing) {
-			getConsoleLogger.error(`there is no ${kind.lowercase()} with id: ${id}`, {
-				id,
-			});
-		}
-	}
+const deleteById = async (id) => {
+	await expenseRepository.deleteById(id);
 };
 
 module.exports = {

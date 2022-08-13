@@ -1,6 +1,7 @@
 const config = require("config");
 const knex = require("knex");
-const { logger } = require("get-logger/lib/getConsoleLogger");
+const { getChildLogger } = require("../core/logger");
+const { join } = require("path");
 
 const NODE_ENV = process.env.NODE_ENV; //config.get("env") doesn't work
 const isDevelopment = NODE_ENV === "development";
@@ -15,6 +16,9 @@ const DATABASE_PASSWORD = config.get("database.password");
 let knexInstance;
 
 async function initializeData() {
+	const logger = getChildLogger("database");
+	logger.info("initialize connection to database");
+
 	const knexOptions = {
 		client: DATABASE_CLIENT,
 		connection: {
@@ -25,15 +29,59 @@ async function initializeData() {
 			password: DATABASE_PASSWORD,
 			insecureAutyh: isDevelopment,
 		},
+		migrations: {
+			tableName: "knex_meta",
+			directory: join("src", "data", "migrations"),
+		},
+		seeds: {
+			directory: join("src", "data", "seeds"),
+		},
 	};
+
 	knexInstance = knex(knexOptions);
 
 	try {
 		await knexInstance.raw("SELECT 1+1 AS result");
+		await knexInstance.raw(`CREATE DATABASE IF NOT EXISTS ${DATABASE_NAME}`);
+
+		// We need to update the Knex configuration and reconnect to use the created database by default
+		// USE ... would not work because a pool of connections is used
+		await knexInstance.destroy();
+
+		knexOptions.connection.database = DATABASE_NAME;
+		knexInstance = knex(knexOptions);
+		await knexInstance.raw("SELECT 1+1 AS result");
 	} catch (error) {
-		// logger.error(error.message, { error });
-		throw new Error("could not initialize the data layer");
+		logger.error(error.message, { error });
+		throw new Error("Could not initialize the data layer");
 	}
+
+	let migrationsFailed = true;
+	try {
+		await knexInstance.migrate.latest();
+		migrationsFailed = false;
+	} catch (error) {
+		logger.error("Error while lmigrating the database", { error });
+	}
+
+	if (migrationsFailed) {
+		try {
+			await knexInstance.migrate.down();
+		} catch (error) {
+			logger.error("Error while undoing last migration", { error });
+		}
+		throw new Error("Migrations failed");
+	}
+
+	if (isDevelopment) {
+		try {
+			await knexInstance.seed.run();
+		} catch (error) {
+			logger.error("Error while seeding database", { error });
+		}
+	}
+
+	logger.info("Succesfully connectd to the databse");
 
 	return knexInstance;
 }
@@ -47,9 +95,9 @@ function getKnex() {
 }
 
 const tables = Object.freeze({
-	expense: "expense",
-	place: "place",
-	category: "category",
+	expense: "expenses",
+	place: "places",
+	category: "categories",
 });
 
 module.exports = {
