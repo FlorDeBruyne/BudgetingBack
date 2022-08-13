@@ -27,7 +27,7 @@ async function initializeData() {
 			database: DATABASE_NAME,
 			user: DATABASE_USERNAME,
 			password: DATABASE_PASSWORD,
-			insecureAutyh: isDevelopment,
+			insecureAuth: isDevelopment,
 		},
 		migrations: {
 			tableName: "knex_meta",
@@ -61,7 +61,7 @@ async function initializeData() {
 		await knexInstance.migrate.latest();
 		migrationsFailed = false;
 	} catch (error) {
-		logger.error("Error while lmigrating the database", { error });
+		logger.error("Error while migrating the database", { error });
 	}
 
 	if (migrationsFailed) {
@@ -81,7 +81,7 @@ async function initializeData() {
 		}
 	}
 
-	logger.info("Succesfully connectd to the databse");
+	logger.info("Succesfully connected to the databse");
 
 	return knexInstance;
 }

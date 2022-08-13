@@ -17,7 +17,7 @@ module.exports = (app) => {
 	installTransactionRouter(router);
 	installPlaceRouter(router);
 	installHealthRouter(router);
-	installUserRouter(router);
+	// installUserRouter(router);
 
 	app.use(router.routes()).use(router.allowedMethods());
 };
