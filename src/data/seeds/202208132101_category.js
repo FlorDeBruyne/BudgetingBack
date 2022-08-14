@@ -1,8 +1,10 @@
+const { tables } = require("..");
+
 module.exports = {
 	seed: async (knex) => {
-		await knex("places").delete();
+		await knex(tables.category).delete();
 
-		await knex("places").insert([
+		await knex(tables.category).insert([
 			{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd83", name: "Housing" },
 			{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd84", name: "transportation" },
 			{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd85", name: "Food" },

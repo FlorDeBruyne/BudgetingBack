@@ -22,7 +22,7 @@ const create = ({ amount, name, categoryId, date, placeId }) => {
 
 const updateById = (id, { amount, name, categoryId, date, placeId }) => {
 	const updateExpense = { amount, name, categoryId, date, placeId };
-	
+
 	return expenseRepository.updateById(id, updateExpense);
 };
 

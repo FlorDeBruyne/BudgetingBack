@@ -2,7 +2,7 @@ const Router = require("@koa/router");
 const installTransactionRouter = require("./_categorys");
 const installHealthRouter = require("./_expenses");
 const installPlaceRouter = require("./_places");
-// const installUserRouter = require('./_user');
+const installUserRouter = require("./_users");
 
 /**
  * Install all routes in the given Koa application.
@@ -17,7 +17,7 @@ module.exports = (app) => {
 	installTransactionRouter(router);
 	installPlaceRouter(router);
 	installHealthRouter(router);
-	// installUserRouter(router);
+	installUserRouter(router);
 
 	app.use(router.routes()).use(router.allowedMethods());
 };

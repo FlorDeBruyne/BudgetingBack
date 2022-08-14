@@ -1,8 +1,10 @@
+const { tables } = require("..");
+
 module.exports = {
 	seed: async (knex) => {
-		await knex("places").delete();
+		await knex(tables.expense).delete();
 
-		await knex("places").insert([
+		await knex(tables.expense).insert([
 			{
 				id: "7f28c5f9-d711-4cd6-ac15-d13d71abdf83",
 				name: "Breakfast",

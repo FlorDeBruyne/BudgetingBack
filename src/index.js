@@ -1,10 +1,8 @@
 const Koa = require("koa");
 const koaCors = require("@koa/cors");
 const config = require("config");
-const { getLogger, initializeLogger } = require("./core/logger");
 const bodyParser = require("koa-bodyparser");
 const Router = require("@koa/router");
-const ExpenseService = require("./service/expense");
 const { initializeData } = require("./data");
 const createServer = require("./createServer");
 
@@ -34,33 +32,6 @@ async function main() {
 			maxAge: CORS_MAX_AGE,
 		})
 	);
-
-	router.get("/api/expenses", async (ctx) => {
-		ctx.body = ExpenseService.getAll();
-	});
-
-	router.get("/api/expenses/:id", async (ctx) => {
-		const id = ctx.params.id;
-		ctx.body = ExpenseService.getById(id);
-	});
-
-	router.post("/api/expenses", async (ctx) => {
-		newExpense = ExpenseService.create({
-			...ctx.request.body,
-			date: new Date(ctx.request.date),
-		});
-		ctx.boyd = newExpense;
-	});
-
-	router.put("/api/expenses/:id", async (ctx) => {
-		updatedExpense = ExpenseService.updateById(ctx.params.id, ctx.request.body);
-		return updatedExpense;
-	});
-
-	router.delete("/api/expenses/:id", async (ctx) => {
-		removedExpense = ExpenseService.deleteById(ctx.params.id);
-		return removedExpense;
-	});
 
 	app.use(router.routes()).use(router.allowedMethods());
 

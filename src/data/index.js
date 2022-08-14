@@ -98,6 +98,7 @@ const tables = Object.freeze({
 	expense: "expenses",
 	place: "places",
 	category: "categories",
+	user: "users"
 });
 
 module.exports = {
