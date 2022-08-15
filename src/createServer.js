@@ -6,6 +6,10 @@ const { initializeLogger, getLogger } = require("./core/logger");
 const { initializeData } = require("./data");
 const installRest = require("./rest");
 
+const swaggerJsdoc = require("swagger-jsdoc");
+const { koaSwagger } = require("koa2-swagger-ui");
+const swaggerOptions = require("../swagger.config");
+
 const NODE_ENV = process.env.NODE_ENV; //config.get("env") doesn't work
 const CORS_ORIGINS = config.get("cors.origins");
 const CORS_MAX_AGE = config.get("cors.maxAge");
@@ -42,6 +46,19 @@ module.exports = async function createServer() {
 	const logger = getLogger();
 
 	app.use(bodyParser());
+
+	// const spec = swaggerJsdoc(swaggerOptions);
+
+	// app.use(
+	// 	koaSwagger({
+	// 		routePrefix: "/swagger",
+	// 		specPrefix: "/swagger/spec",
+	// 		exposeSpec: true,
+	// 		swaggerOptions: {
+	// 			spec,
+	// 		},
+	// 	})
+	// );
 
 	installRest(app);
 

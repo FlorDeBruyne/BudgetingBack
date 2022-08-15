@@ -2,42 +2,12 @@ const { tables, getKnex } = require("../data/index");
 const { getChildLogger } = require("../core/logger");
 const uuid = require("uuid");
 
-
-// const formatExpense = ({
-// 	placeId,
-// 	placeName,
-// 	categoryId,
-// 	categoryName,
-// 	...rest
-// }) => ({
-// 	...rest,
-// 	place: {
-// 		id: placeId,
-// 		name: placeName,
-// 	},
-// 	category: {
-// 		id: categoryId,
-// 		name: categoryName,
-// 	},
-// });
-
-const SELECT_COLUMS = [
-	`${tables.expense}.id`,
-	"amount",
-	"date",
-	`${tables.place}.id as placeId`,
-	`${tables.place}.name as placeName`,
-	`${tables.category}.id as categoryId`,
-	`${tables.category}.name as categoryName`,
-];
-
 const findAll = ({ limit, offset }) => {
 	return getKnex()(tables.expense)
 		.select()
 		.limit(limit)
 		.offset(offset)
-		.orderBy("name", "ASC")
-		.first(SELECT_COLUMS);
+		.orderBy("name", "ASC");
 };
 
 const findById = async (id) => {
@@ -54,8 +24,7 @@ const findById = async (id) => {
 			"=",
 			`${tables.expense}.categoryId`
 		)
-		.where("id", id)
-		.first(SELECT_COLUMS);
+		.where("id", id);
 };
 
 const findByName = async (name) => {

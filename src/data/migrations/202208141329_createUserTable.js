@@ -9,8 +9,6 @@ module.exports = {
 
 			table.string("email", 255).notNullable();
 
-			table.string("password", 255).notNullable();
-
 			table.string("phonenumber", 255).notNullable();
 
 			table.unique("id", "idx_user_id_unique");

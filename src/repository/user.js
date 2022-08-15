@@ -14,11 +14,18 @@ const findById = async (id) => {
 	return await getKnex()(tables.user).where("id", id);
 };
 
-const findByName = async (name) => {
-	return await getKnex()(tables.user).where("name", name).first();
+const findByEmail = async (email) => {
+	return await getKnex()(tables.user).where("email", email).first();
 };
 
-const create = async ({ surname, name, email, password, phonenumber }) => {
+const create = async ({
+	surname,
+	name,
+	email,
+	passwordHash,
+	phonenumber,
+	roles,
+}) => {
 	try {
 		const id = uuid.v4();
 		await getKnex()(tables.user).insert({
@@ -26,8 +33,9 @@ const create = async ({ surname, name, email, password, phonenumber }) => {
 			surname,
 			name,
 			email,
-			password,
+			password_hash: passwordHash,
 			phonenumber,
+			roles: JSON.stringify(roles),
 		});
 		return findById(id);
 	} catch (error) {
@@ -37,17 +45,13 @@ const create = async ({ surname, name, email, password, phonenumber }) => {
 	}
 };
 
-const updateById = async (
-	id,
-	{ surname, name, email, password, phonenumber }
-) => {
+const updateById = async (id, { surname, name, email, phonenumber }) => {
 	try {
 		await getKnex()(tables.user)
 			.update({
 				surname,
 				name,
 				email,
-				password,
 				phonenumber,
 			})
 			.where("id", id);
@@ -80,7 +84,7 @@ const deleteById = async (id) => {
 module.exports = {
 	findAll,
 	findById,
-	findByName,
+	findByEmail,
 	findCount,
 	create,
 	updateById,

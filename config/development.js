@@ -17,4 +17,18 @@ module.exports = {
 		username: "root",
 		password: "root",
 	},
+	auth: {
+		bcryptjs: {
+			saltLength: 16,
+			hashLenght: 32,
+			timeCost: 6,
+			memoryCost: 2 ** 17,
+		},
+		jwt: {
+			secret: 'dezesecretzaljenooitmaardannooitradendestatistiekisnietinjevoordeel',
+			expirationInterval: 60 * 60 * 1000, // ms (1 hour)
+			issuer: 'flor.budget.api',
+			audience: 'flor.budget.api',
+		}
+	},
 };

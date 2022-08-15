@@ -3,8 +3,8 @@ const knex = require("knex");
 const { getChildLogger } = require("../core/logger");
 const { join } = require("path");
 
-const NODE_ENV = process.env.NODE_ENV; //config.get("env") doesn't work
-const isDevelopment = NODE_ENV === "development";
+// const NODE_ENV = config.get('env'); //config.get("env") doesn't work
+const isDevelopment = true; //NODE_ENV === "development";
 
 const DATABASE_CLIENT = config.get("database.client");
 const DATABASE_NAME = config.get("database.name");
@@ -24,7 +24,7 @@ async function initializeData() {
 		connection: {
 			host: DATABASE_HOST,
 			port: DATABASE_PORT,
-			database: DATABASE_NAME,
+			// database: DATABASE_NAME,
 			user: DATABASE_USERNAME,
 			password: DATABASE_PASSWORD,
 			insecureAuth: isDevelopment,
@@ -86,6 +86,17 @@ async function initializeData() {
 	return knexInstance;
 }
 
+async function shutdownData() {
+	const logger = getChildLogger("database");
+
+	logger.info("Shutting down database connection");
+
+	await knexInstance.destroy();
+	knexInstance = null;
+
+	logger.info("Database connection closed");
+}
+
 function getKnex() {
 	if (!knexInstance)
 		throw new Error(
@@ -98,11 +109,12 @@ const tables = Object.freeze({
 	expense: "expenses",
 	place: "places",
 	category: "categories",
-	user: "users"
+	user: "users",
 });
 
 module.exports = {
 	initializeData,
-	tables,
+	shutdownData,
 	getKnex,
+	tables,
 };
