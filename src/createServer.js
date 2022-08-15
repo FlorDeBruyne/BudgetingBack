@@ -5,6 +5,8 @@ const bodyParser = require("koa-bodyparser");
 const { initializeLogger, getLogger } = require("./core/logger");
 const { initializeData } = require("./data");
 const installRest = require("./rest");
+const { serializeError } = require("serialize-error");
+const ServiceError = require("./core/serviceError");
 
 const swaggerJsdoc = require("swagger-jsdoc");
 const { koaSwagger } = require("koa2-swagger-ui");
@@ -59,6 +61,74 @@ module.exports = async function createServer() {
 	// 		},
 	// 	})
 	// );
+
+	app.use(async (ctx, next) => {
+		logger.info(`${ctx.method} ${ctx.url}`);
+
+		const getStatusMessage = () => {
+			if (ctx.status >= 500) return "Dead";
+			if (ctx.status >= 400) return "X";
+			if (ctx.status >= 300) return "Flying";
+			if (ctx.status >= 200) return "Working";
+			return "Rewind";
+		};
+
+		try {
+			await next();
+			logger.info(
+				`${getStatusMessage()} ${ctx.method} ${ctx.status} ${ctx.url}`
+			);
+		} catch (error) {
+			logger.error(
+				`${getStatusMessage()} ${ctx.method} ${ctx.status} ${ctx.url}`,
+				{ error }
+			);
+			throw error;
+		}
+	});
+
+	app.use(async (ctx, next) => {
+		try {
+			await next();
+
+			if (ctx.status === 404) {
+				ctx.body = {
+					code: "NOT_FOUND",
+					message: `Unknown resource: ${ctx.url}`,
+				};
+			}
+		} catch (error) {
+			logger.error("Error occured while handling a request", {
+				error: serializeError(error),
+			});
+		}
+
+		let statusCode = error.status || 500;
+		let errorBody = {
+			code: error.code || "INTERNAL_SERVER_ERROR",
+			message: error.message,
+			details: error.details || {},
+			stack: NODE_ENV !== "production" ? error.stack : undefined,
+		};
+
+		if (error instanceof ServiceError) {
+			if (error.isNotFound) {
+				statusCode = 404;
+			}
+
+			if (error.isValidationFailed) {
+				statusCode = 400;
+			}
+
+			if (error.isUnauthorized) {
+				statusCode = 401;
+			}
+
+			if (error.isForbidden) {
+				statusCode = 403;
+			}
+		}
+	});
 
 	installRest(app);
 

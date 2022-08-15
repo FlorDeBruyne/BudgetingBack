@@ -1,7 +1,7 @@
 const { verifyPassword, hashPassword } = require("../core/password");
 const { generateJWT, verifyJWT } = require("../core/jwt");
-const { getChildLogger } = require("../core/logger")
-const Role = requirqe("../core/roles");
+const { getChildLogger } = require("../core/logger");
+const Role = require("../core/roles");
 
 const userRepository = require("../repository/user");
 
@@ -68,13 +68,15 @@ const login = async (email, password) => {
  * @param {string} user.name - The user's name.
  */
 
-const register = async ({ name, email, password }) => {
+const register = async ({ name, surname, email,phonenumber, password }) => {
 	debugLog("Creating a new user", { name });
 	const passwordHash = await hashPassword(password);
 
 	const user = await userRepository.create({
 		name,
+		surname,
 		email,
+		phonenumber,
 		passwordHash,
 		roles: [Role.USER],
 	});

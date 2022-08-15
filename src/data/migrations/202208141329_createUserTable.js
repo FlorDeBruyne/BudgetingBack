@@ -7,7 +7,7 @@ module.exports = {
 
 			table.string("name", 255).notNullable();
 
-			table.string("email", 255).notNullable();
+			table.email("email", 255).notNullable();
 
 			table.string("phonenumber", 255).notNullable();
 

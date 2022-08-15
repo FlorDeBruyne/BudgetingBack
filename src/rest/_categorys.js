@@ -1,6 +1,8 @@
 const Router = require("@koa/router");
 const categoryService = require("../service/category");
-
+const Joi = require("joi");
+const validate = require("./_validation");
+const { requireAuthentication } = require("../core/auth");
 /**
  * @swagger
  * tags:
@@ -73,6 +75,12 @@ const categoryService = require("../service/category");
 const getAllCategorys = async (ctx) => {
 	ctx.body = await categoryService.getAll();
 };
+getAllCategorys.validationScheme = {
+	query: Joi.object({
+		limit: Joi.number().integer().positive().max(1000).optional(),
+		offset: Joi.number().min(0).optional(),
+	}).and("limit", "offset"),
+};
 
 /**
  * @swagger
@@ -96,13 +104,31 @@ const createCategory = async (ctx) => {
 	ctx.body = newcategory;
 	ctx.status = 201;
 };
+createCategory.validationScheme = {
+	body: {
+		name: Joi.string().max(255),
+	},
+};
 
 const getCategoryById = async (ctx) => {
 	ctx.body = await categoryService.getcategoryById(ctx.params.id);
 };
+getCategoryById.validationScheme = {
+	params: {
+		id: Joi.string().uuid(),
+	},
+};
 
 const updateCategory = async (ctx) => {
 	ctx.body = await categoryService.updateById(ctx.params.id, ctx.request.body);
+};
+updateCategory.validationScheme = {
+	params: {
+		id: Joi.string().uuid(),
+	},
+	body: {
+		name: Joi.string.max(255),
+	},
 };
 
 const deleteCategory = async (ctx) => {
@@ -110,17 +136,47 @@ const deleteCategory = async (ctx) => {
 
 	ctx.status = 204;
 };
+deleteCategory.validationScheme = {
+	params: {
+		id: Joi.string().uuid(),
+	},
+};
 
 module.exports = (app) => {
 	const router = new Router({
 		prefix: "/categorys",
 	});
 
-	router.get("/", getAllCategorys);
-	router.post("/", createCategory);
-	router.get("/:id", getCategoryById);
-	router.put("/:id", updateCategory);
-	router.delete("/:id", deleteCategory);
+	router.get(
+		"/",
+		requireAuthentication,
+		validate(getAllCategorys.validationScheme),
+		getAllCategorys
+	);
+	router.post(
+		"/",
+		requireAuthentication,
+		validate(createCategory.validationScheme),
+		createCategory
+	);
+	router.get(
+		"/:id",
+		requireAuthentication,
+		validate(getCategoryById.validationScheme),
+		getCategoryById
+	);
+	router.put(
+		"/:id",
+		requireAuthentication,
+		validate(updateCategory.validationScheme),
+		updateCategory
+	);
+	router.delete(
+		"/:id",
+		requireAuthentication,
+		validate(deleteCategory.validationScheme),
+		deleteCategory
+	);
 
 	app.use(router.routes()).use(router.allowedMethods());
 };
