@@ -1,4 +1,4 @@
-const { shutdownData, getKnex, tables } = require("../data");
+const { shutdownData, getKnex, tables } = require("../src/data");
 module.exports = async () => {
 	await getKnex()(tables.category).delete();
 	await getKnex()(tables.user).delete();

@@ -127,7 +127,7 @@ updateCategory.validationScheme = {
 		id: Joi.string().uuid(),
 	},
 	body: {
-		name: Joi.string.max(255),
+		name: Joi.string().max(255),
 	},
 };
 

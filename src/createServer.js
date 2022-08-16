@@ -12,7 +12,7 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const { koaSwagger } = require("koa2-swagger-ui");
 const swaggerOptions = require("../swagger.config");
 
-const NODE_ENV = process.env.NODE_ENV; //config.get("env") doesn't work
+const NODE_ENV = process.env.NODE_ENV; // doesn't work  config.get("env")
 const CORS_ORIGINS = config.get("cors.origins");
 const CORS_MAX_AGE = config.get("cors.maxAge");
 const LOG_LEVEL = config.get("log.level");
@@ -139,8 +139,9 @@ module.exports = async function createServer() {
 
 		start() {
 			return new Promise((resolve) => {
-				app.listen(9000);
-				logger.info(`🚀 Server listening on http://localhost:9000`);
+				const port = process.env.PORT || 9000;
+				app.listen(port);
+				logger.info(`🚀 Server listening on http://localhost:${port}`);
 				resolve();
 			});
 		},

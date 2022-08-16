@@ -15,7 +15,11 @@ module.exports = {
 		port: 3306,
 		name: "budget",
 		username: "root",
-		password: "root",
+		password: "root"
+	},
+	pagination: {
+		limit: 100,
+		offset: 0,
 	},
 	auth: {
 		bcryptjs: {
@@ -25,10 +29,11 @@ module.exports = {
 			memoryCost: 2 ** 17,
 		},
 		jwt: {
-			secret: 'dezesecretzaljenooitmaardannooitradendestatistiekisnietinjevoordeel',
+			secret:
+				"dezesecretzaljenooitmaardannooitradendestatistiekisnietinjevoordeel",
 			expirationInterval: 60 * 60 * 1000, // ms (1 hour)
-			issuer: 'flor.budget.api',
-			audience: 'flor.budget.api',
-		}
+			issuer: "flor.budget.api",
+			audience: "flor.budget.api",
+		},
 	},
 };
