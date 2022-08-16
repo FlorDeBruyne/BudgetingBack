@@ -1,7 +1,7 @@
 const supertest = require("supertest");
 
-const createServer = require("../createServer");
-const { getKnex } = require("../data");
+const createServer = require("../src/createServer");
+const { getKnex } = require("../src/data");
 
 /**
  * Sign in using the test user.
