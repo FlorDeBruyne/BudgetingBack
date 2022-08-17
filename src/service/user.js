@@ -68,7 +68,7 @@ const login = async (email, password) => {
  * @param {string} user.name - The user's name.
  */
 
-const register = async ({ name, surname, email,phonenumber, password }) => {
+const register = async ({ name, surname, email, phonenumber, password }) => {
 	debugLog("Creating a new user", { name });
 	const passwordHash = await hashPassword(password);
 
@@ -142,7 +142,7 @@ const checkAndParseSession = async (authHeader) => {
 	} catch (error) {
 		const logger = getChildLogger("user-service");
 		logger.error(error.message, { error });
-		throw ServiceError.unauthorized(error.message);
+		throw error.message;
 	}
 };
 

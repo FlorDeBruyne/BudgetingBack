@@ -5,8 +5,8 @@ const bodyParser = require("koa-bodyparser");
 const { initializeLogger, getLogger } = require("./core/logger");
 const { initializeData } = require("./data");
 const installRest = require("./rest");
-const { serializeError } = require("serialize-error");
-const ServiceError = require("./core/serviceError");
+// const { serializeError } = require("serialize-error");
+// const ServiceError = require("./core/serviceError");
 
 const swaggerJsdoc = require("swagger-jsdoc");
 const { koaSwagger } = require("koa2-swagger-ui");
@@ -67,7 +67,7 @@ module.exports = async function createServer() {
 
 		const getStatusMessage = () => {
 			if (ctx.status >= 500) return "Dead";
-			if (ctx.status >= 400) return "X";
+			if (ctx.status >= 400) return "bruv";
 			if (ctx.status >= 300) return "Flying";
 			if (ctx.status >= 200) return "Working";
 			return "Rewind";
@@ -99,35 +99,35 @@ module.exports = async function createServer() {
 			}
 		} catch (error) {
 			logger.error("Error occured while handling a request", {
-				error: serializeError(error),
+				// error: serializeError(error),
 			});
 		}
 
-		let statusCode = error.status || 500;
-		let errorBody = {
-			code: error.code || "INTERNAL_SERVER_ERROR",
-			message: error.message,
-			details: error.details || {},
-			stack: NODE_ENV !== "production" ? error.stack : undefined,
-		};
+		// let statusCode = error.status || 500;
+		// let errorBody = {
+		// 	code: error.code || "INTERNAL_SERVER_ERROR",
+		// 	message: error.message,
+		// 	details: error.details || {},
+		// 	stack: NODE_ENV !== "production" ? error.stack : undefined,
+		// };
 
-		if (error instanceof ServiceError) {
-			if (error.isNotFound) {
-				statusCode = 404;
-			}
+		// if (error instanceof ServiceError) {
+		// 	if (error.isNotFound) {
+		// 		statusCode = 404;
+		// 	}
 
-			if (error.isValidationFailed) {
-				statusCode = 400;
-			}
+		// 	if (error.isValidationFailed) {
+		// 		statusCode = 400;
+		// 	}
 
-			if (error.isUnauthorized) {
-				statusCode = 401;
-			}
+		// 	if (error.isUnauthorized) {
+		// 		statusCode = 401;
+		// 	}
 
-			if (error.isForbidden) {
-				statusCode = 403;
-			}
-		}
+		// 	if (error.isForbidden) {
+		// 		statusCode = 403;
+		// 	}
+		// }
 	});
 
 	installRest(app);

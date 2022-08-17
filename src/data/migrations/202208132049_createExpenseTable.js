@@ -13,7 +13,7 @@ module.exports = {
 
 			table.uuid("placeId").notNullable();
 
-			// table.uuid("userId").notNullable(); later
+			table.uuid("userId").notNullable();
 
 			table
 				.foreign("categoryId", "fk_expense_category")
@@ -25,11 +25,11 @@ module.exports = {
 				.reference(`${tables.place}.id`)
 				.onDelete("CASCADE");
 
-			// not this evening
-			// table
-			// 	.foreign("userId", "fk_expense_user")
-			// 	.reference(`${tables.user}.id`)
-			// 	.onDelete("CASCADE");
+			
+			table
+				.foreign("userId", "fk_expense_user")
+				.reference(`${tables.user}.id`)
+				.onDelete("CASCADE");
 
 			table.unique("name", "idx_expense_name_unique");
 		});
