@@ -1,4 +1,4 @@
-const { tables } = require("../../data");
+const { tables } = require("../../src/data");
 const { withServer, login } = require("../supertest.setup");
 
 const data = {

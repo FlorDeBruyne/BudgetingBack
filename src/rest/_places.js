@@ -22,7 +22,7 @@ const createPlace = async (ctx) => {
 };
 createPlace.validationScheme = {
 	body: {
-		name: Joi.string.max(255),
+		name: Joi.string().max(255),
 	},
 };
 

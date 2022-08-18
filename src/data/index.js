@@ -3,8 +3,8 @@ const knex = require("knex");
 const { getChildLogger } = require("../core/logger");
 const { join } = require("path");
 
-// const NODE_ENV = config.get('env'); //config.get("env") doesn't work
-const isDevelopment = true; //NODE_ENV === "development";
+//const NODE_ENV = config.get('env'); //config.get("env") doesn't work
+const isDevelopment = false; //NODE_ENV === "development";
 
 const DATABASE_CLIENT = config.get("database.client");
 const DATABASE_NAME = config.get("database.name");

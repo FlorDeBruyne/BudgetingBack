@@ -5,14 +5,14 @@ const bodyParser = require("koa-bodyparser");
 const { initializeLogger, getLogger } = require("./core/logger");
 const { initializeData } = require("./data");
 const installRest = require("./rest");
-const { serializeError } = require("serialize-error");
-const ServiceError = require("./core/serviceError");
+// const { serializeError } = require("serialize-error");
+// const ServiceError = require("./core/serviceError");
 
 const swaggerJsdoc = require("swagger-jsdoc");
 const { koaSwagger } = require("koa2-swagger-ui");
 const swaggerOptions = require("../swagger.config");
 
-const NODE_ENV = process.env.NODE_ENV; //config.get("env") doesn't work
+const NODE_ENV = process.env.NODE_ENV; // doesn't work  config.get("env")
 const CORS_ORIGINS = config.get("cors.origins");
 const CORS_MAX_AGE = config.get("cors.maxAge");
 const LOG_LEVEL = config.get("log.level");
@@ -67,7 +67,7 @@ module.exports = async function createServer() {
 
 		const getStatusMessage = () => {
 			if (ctx.status >= 500) return "Dead";
-			if (ctx.status >= 400) return "X";
+			if (ctx.status >= 400) return "bruv";
 			if (ctx.status >= 300) return "Flying";
 			if (ctx.status >= 200) return "Working";
 			return "Rewind";
@@ -99,35 +99,35 @@ module.exports = async function createServer() {
 			}
 		} catch (error) {
 			logger.error("Error occured while handling a request", {
-				error: serializeError(error),
+				// error: serializeError(error),
 			});
 		}
 
-		let statusCode = error.status || 500;
-		let errorBody = {
-			code: error.code || "INTERNAL_SERVER_ERROR",
-			message: error.message,
-			details: error.details || {},
-			stack: NODE_ENV !== "production" ? error.stack : undefined,
-		};
+		// let statusCode = error.status || 500;
+		// let errorBody = {
+		// 	code: error.code || "INTERNAL_SERVER_ERROR",
+		// 	message: error.message,
+		// 	details: error.details || {},
+		// 	stack: NODE_ENV !== "production" ? error.stack : undefined,
+		// };
 
-		if (error instanceof ServiceError) {
-			if (error.isNotFound) {
-				statusCode = 404;
-			}
+		// if (error instanceof ServiceError) {
+		// 	if (error.isNotFound) {
+		// 		statusCode = 404;
+		// 	}
 
-			if (error.isValidationFailed) {
-				statusCode = 400;
-			}
+		// 	if (error.isValidationFailed) {
+		// 		statusCode = 400;
+		// 	}
 
-			if (error.isUnauthorized) {
-				statusCode = 401;
-			}
+		// 	if (error.isUnauthorized) {
+		// 		statusCode = 401;
+		// 	}
 
-			if (error.isForbidden) {
-				statusCode = 403;
-			}
-		}
+		// 	if (error.isForbidden) {
+		// 		statusCode = 403;
+		// 	}
+		// }
 	});
 
 	installRest(app);
@@ -139,8 +139,9 @@ module.exports = async function createServer() {
 
 		start() {
 			return new Promise((resolve) => {
-				app.listen(9000);
-				logger.info(`🚀 Server listening on http://localhost:9000`);
+				const port = process.env.PORT || 9000;
+				app.listen(port);
+				logger.info(`🚀 Server listening on http://localhost:${port}`);
 				resolve();
 			});
 		},

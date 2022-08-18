@@ -1,6 +1,6 @@
 const Router = require("@koa/router");
-const installTransactionRouter = require("./_categorys");
-const installHealthRouter = require("./_expenses");
+const installCategoryRouter = require("./_categorys");
+const installExpenseRouter = require("./_expenses");
 const installPlaceRouter = require("./_places");
 const installUserRouter = require("./_users");
 
@@ -96,9 +96,9 @@ module.exports = (app) => {
 		prefix: "/api",
 	});
 
-	installTransactionRouter(router);
+	installCategoryRouter(router);
 	installPlaceRouter(router);
-	installHealthRouter(router);
+	installExpenseRouter(router);
 	installUserRouter(router);
 
 	app.use(router.routes()).use(router.allowedMethods());

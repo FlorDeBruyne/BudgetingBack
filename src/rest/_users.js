@@ -58,7 +58,7 @@ createUser.validationScheme = {
 		name: Joi.string().max(255),
 		surname: Joi.string().max(255),
 		email: Joi.string().email(),
-		phonenumber: Joi.string.max(255),
+		phonenumber: Joi.string().max(255),
 		password: Joi.string().min(8).max(30),
 	},
 };
@@ -84,7 +84,7 @@ updateUser.validationScheme = {
 		name: Joi.string().max(255),
 		surname: Joi.string().max(255),
 		email: Joi.string().email(),
-		phonenumber: Joi.string.max(255),
+		phonenumber: Joi.string().max(255),
 		password: Joi.string().min(8).max(30),
 	},
 };

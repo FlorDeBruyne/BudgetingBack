@@ -23,7 +23,7 @@ createExpense.validationScheme = {
 	body: {
 		amount: Joi.number().invalid(0),
 		name: Joi.string().max(255),
-		categoryId: Joi.string.uuid(),
+		categoryId: Joi.string().uuid(),
 		date: Joi.date().iso().less("now"),
 		placeId: Joi.string().uuid(),
 	},
@@ -48,7 +48,7 @@ updateExpense.validationScheme = {
 	body: {
 		amount: Joi.number().invalid(0),
 		name: Joi.string().max(255),
-		categoryId: Joi.string.uuid(),
+		categoryId: Joi.string().uuid(),
 		date: Joi.date().iso().less("now"),
 		placeId: Joi.string().uuid(),
 	},

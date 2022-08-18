@@ -1,13 +1,9 @@
-const { tables } = require("../../data");
+const { tables } = require("../../src/data");
 const { withServer, login } = require("../supertest.setup");
 
-const data = {
-	
-};
+const data = {};
 
-const dataToDelete = {
-	
-};
+const dataToDelete = {};
 
 describe("Categorys", () => {
 	let request;
