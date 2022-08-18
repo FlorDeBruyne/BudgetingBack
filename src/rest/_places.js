@@ -43,7 +43,7 @@ updatePlace.validationScheme = {
 		id: Joi.string().uuid(),
 	},
 	body: {
-		name: Joi.string().uuid(),
+		name: Joi.string(),
 	},
 };
 

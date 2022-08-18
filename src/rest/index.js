@@ -4,6 +4,8 @@ const installExpenseRouter = require("./_expenses");
 const installPlaceRouter = require("./_places");
 const installUserRouter = require("./_users");
 const installHealthRouter = require("./_health");
+const installFactsGentRouter = require("./_factsGent");
+const installQuizGentRouter = require("./_quizGent");
 
 /**
  * Install all routes in the given Koa application.
@@ -96,6 +98,9 @@ module.exports = (app) => {
 		prefix: "/api",
 	});
 
+	installQuizGentRouter(router);
+	installFactsGentRouter(router);
+	installQuizGentRouter(router);
 	installHealthRouter(router);
 	installCategoryRouter(router);
 	installPlaceRouter(router);

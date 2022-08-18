@@ -1,0 +1,17 @@
+module.exports = {
+	up: async (knex) => {
+		await knex.schema.createTable("quizGent", (table) => {
+			table.uuid("id").primary();
+
+			table.string("vraag", 255).notNullable();
+
+			table.string("antwoord", 500).notNullable();
+
+			table.unique("vraag", "idx_quizGent_vraag_unique");
+		});
+	},
+
+	down: (knex) => {
+		return knex.schema.dropTableIfExists("quizGent");
+	},
+};

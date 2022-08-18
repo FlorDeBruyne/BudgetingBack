@@ -110,6 +110,8 @@ const tables = Object.freeze({
 	place: "places",
 	category: "categories",
 	user: "users",
+	factsGent: "factsGent",
+	quizGent: "quizGent"
 });
 
 module.exports = {
