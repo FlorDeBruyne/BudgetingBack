@@ -5,8 +5,8 @@ const bodyParser = require("koa-bodyparser");
 const { initializeLogger, getLogger } = require("./core/logger");
 const { initializeData } = require("./data");
 const installRest = require("./rest");
-// const { serializeError } = require("serialize-error");
-// const ServiceError = require("./core/serviceError");
+const { serializeError } = require("serialize-error");
+const ServiceError = require("./core/serviceError");
 
 const swaggerJsdoc = require("swagger-jsdoc");
 const { koaSwagger } = require("koa2-swagger-ui");
@@ -98,8 +98,9 @@ module.exports = async function createServer() {
 				};
 			}
 		} catch (error) {
+			logger.info(ctx.body)
 			logger.error("Error occured while handling a request", {
-				// error: serializeError(error),
+				error: serializeError(error),
 			});
 		}
 
@@ -128,6 +129,9 @@ module.exports = async function createServer() {
 		// 		statusCode = 403;
 		// 	}
 		// }
+
+		// ctx.status = statusCode;
+		// ctx.body = errorBody;
 	});
 
 	installRest(app);

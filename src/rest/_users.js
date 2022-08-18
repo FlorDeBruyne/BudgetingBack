@@ -106,8 +106,10 @@ module.exports = function installUserRoutes(app) {
 	});
 
 	//public routes
-	router.post("/login", login);
-	router.post("/register", register);
+	// validate(login.validationScheme),
+	// validate(register.validationScheme),
+	router.post("/login", validate(login.validationScheme), login);
+	router.post("/register", validate(register.validationScheme), register);
 
 	const requireAdmin = makeRequireRole(Role.ADMIN);
 

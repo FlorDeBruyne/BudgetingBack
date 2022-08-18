@@ -22,9 +22,9 @@ module.exports = {
 		offset: 0,
 	},
 	auth: {
-		bcryptjs: {
+		argon: {
 			saltLength: 16,
-			hashLenght: 32,
+			hashLength: 32,
 			timeCost: 6,
 			memoryCost: 2 ** 17,
 		},

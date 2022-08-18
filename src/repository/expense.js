@@ -24,7 +24,7 @@ const findById = async (id) => {
 			"=",
 			`${tables.expense}.categoryId`
 		)
-		.where("id", id);
+		.where(	tables.expense+".id", id);
 };
 
 const findByName = async (name) => {

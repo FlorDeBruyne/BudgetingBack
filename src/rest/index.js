@@ -3,6 +3,7 @@ const installCategoryRouter = require("./_categorys");
 const installExpenseRouter = require("./_expenses");
 const installPlaceRouter = require("./_places");
 const installUserRouter = require("./_users");
+const installHealthRouter = require("./_health");
 
 /**
  * Install all routes in the given Koa application.
@@ -39,7 +40,7 @@ const installUserRouter = require("./_users");
  *     Base:
  *       required:
  *         - id
-  *       properties:
+ *       properties:
  *         id:
  *           type: string
  *           format: "uuid"
@@ -79,7 +80,7 @@ const installUserRouter = require("./_users");
  *               type: "string"
  *             phonenumber:
  *               type: "string"
- * 
+ *
  *           example:
  *             $ref: "#/components/examples/User"
  *   examples:
@@ -90,12 +91,12 @@ const installUserRouter = require("./_users");
  *       phonenumber: "0393094094"
  */
 
-
 module.exports = (app) => {
 	const router = new Router({
 		prefix: "/api",
 	});
 
+	installHealthRouter(router);
 	installCategoryRouter(router);
 	installPlaceRouter(router);
 	installExpenseRouter(router);

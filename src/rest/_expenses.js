@@ -30,7 +30,7 @@ createExpense.validationScheme = {
 };
 
 const getExpenseById = async (ctx) => {
-	ctx.body = await expenseService.getexpenseById(ctx.params.id);
+	ctx.body = await expenseService.getById(ctx.params.id);
 };
 getExpenseById.validationScheme = {
 	params: {

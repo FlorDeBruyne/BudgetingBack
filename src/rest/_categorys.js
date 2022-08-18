@@ -149,8 +149,8 @@ module.exports = (app) => {
 
 	router.get(
 		"/",
-		requireAuthentication,
-		validate(getAllCategorys.validationScheme),
+		// requireAuthentication,
+		// validate(getAllCategorys.validationScheme),
 		getAllCategorys
 	);
 	router.post(

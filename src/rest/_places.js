@@ -65,8 +65,8 @@ module.exports = (app) => {
 
 	router.get(
 		"/",
-		requireAuthentication,
-		validate(getAllPlaces.validationScheme),
+		// requireAuthentication,
+		// validate(getAllPlaces.validationScheme),
 		getAllPlaces
 	);
 	router.post(

@@ -2,12 +2,18 @@ const { verifyPassword, hashPassword } = require("../core/password");
 const { generateJWT, verifyJWT } = require("../core/jwt");
 const { getChildLogger } = require("../core/logger");
 const Role = require("../core/roles");
+const ServiceError = require("../core/serviceError.js")
 
 const userRepository = require("../repository/user");
 
 /**
  * Only return the public information about the given user.
  */
+
+ const debugLog = (message, meta = {}) => {
+  if (!this.logger) this.logger = getChildLogger('user-service');
+  this.logger.debug(message, meta);
+};
 
 const makeExposedUser = ({ id, name, email, phonenumber, roles }) => ({
 	id,
@@ -69,7 +75,7 @@ const login = async (email, password) => {
  */
 
 const register = async ({ name, surname, email, phonenumber, password }) => {
-	debugLog("Creating a new user", { name });
+	debugLog("Creating a new user", name );
 	const passwordHash = await hashPassword(password);
 
 	const user = await userRepository.create({
