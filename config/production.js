@@ -13,6 +13,7 @@ module.exports = {
 		host: "localhost",
 		port: 3306,
 		name: "budget",
+		username: "root",
 	},
 	pagination: {
 		limit: 100,
