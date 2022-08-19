@@ -1,10 +1,10 @@
 const config = require("config");
-const argon2 = require('argon2');
+const argon2 = require("argon2");
 
-const ARGON_SALT_LENGTH = config.get("auth.argon.saltLength");
-const ARGON_HASH_LENGTH = config.get("auth.argon.hashLength");
-const ARGON_TIME_COST = config.get("auth.argon.timeCost");
-const ARGON_MEMORY_COST = config.get("auth.argon.memoryCost");
+const ARGON_SALT_LENGTH = 16; //config.get("auth.argon.saltLength");
+const ARGON_HASH_LENGTH = 32; //config.get("auth.argon.hashLength");
+const ARGON_TIME_COST = 6; //config.get("auth.argon.timeCost");
+const ARGON_MEMORY_COST = 2 ** 17; //config.get("auth.argon.memoryCost");
 
 module.exports.hashPassword = async (password) => {
 	const passwordHash = await argon2.hash(password, {

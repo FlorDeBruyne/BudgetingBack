@@ -10,9 +10,9 @@ const userRepository = require("../repository/user");
  * Only return the public information about the given user.
  */
 
- const debugLog = (message, meta = {}) => {
+ const debugLog = (message = {}) => {
   if (!this.logger) this.logger = getChildLogger('user-service');
-  this.logger.debug(message, meta);
+  this.logger.debug(message);
 };
 
 const makeExposedUser = ({ id, name, email, phonenumber, roles }) => ({
@@ -147,7 +147,7 @@ const checkAndParseSession = async (authHeader) => {
 		};
 	} catch (error) {
 		const logger = getChildLogger("user-service");
-		logger.error(error.message, { error });
+		logger.error(error.message, { error }); //
 		throw error.message;
 	}
 };

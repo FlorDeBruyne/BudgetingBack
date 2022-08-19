@@ -28,7 +28,7 @@ const create = async ({ name }) => {
 		return findById(id);
 	} catch (error) {
 		const logger = getChildLogger("places-repo");
-		logger.error("Error in create", { error });
+		logger.error("Error in create"  , { error });//
 		throw error;
 	}
 };
@@ -44,7 +44,7 @@ const updateById = async (id, {name}) => {
 		return await findById(id);
 	} catch (error) {
 		const logger = getChildLogger("places-repo");
-		logger.error("Error in updateByid", { error });
+		logger.error("Error in updateByid"  , { error });//
 		throw error;
 	}
 };
@@ -61,7 +61,7 @@ const deleteById = async (id) => {
 		return rowAffected > 0;
 	} catch (error) {
 		const logger = getChildLogger("places-repo");
-		logger.error("Error in deleteById", { error });
+		logger.error("Error in deleteById"  , { error });//
 		throw error;
 	}
 };

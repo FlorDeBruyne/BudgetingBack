@@ -72,6 +72,7 @@ const { requireAuthentication } = require("../core/auth");
  *     schema:
  *      $ref: "#/components/schemas/CategorysList"
  */
+
 const getAllCategorys = async (ctx) => {
 	ctx.body = await categoryService.getAll();
 };
@@ -99,6 +100,8 @@ getAllCategorys.validationScheme = {
  *             schema:
  *               $ref: "#/components/schemas/Category"
  */
+
+
 const createCategory = async (ctx) => {
 	const newcategory = await categoryService.create(ctx.request.body);
 	ctx.body = newcategory;

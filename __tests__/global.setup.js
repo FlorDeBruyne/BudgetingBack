@@ -7,8 +7,8 @@ const Role = require("../src/core/roles");
 module.exports = async () => {
 	//creating a connection to the database
 	initializeLogger({
-		level: config.get("log.level"),
-		disabled: config.get("log.disabled"),
+		level: "silly",//config.get("log.level"),
+		name: "test"
 	});
 	await initializeData();
 
@@ -19,6 +19,7 @@ module.exports = async () => {
 		{
 			id: "7f28c5f9-d711-4cd6-ac15-d13d71abuu44",
 			name: "Test User",
+			surname: "test surname",
 			email: "test.user@test.be",
 			password_hash:
 				"$2a$16$dSOaY4MOYDbZffVgDOKUs./r76jOhKTtxyTTNf6QsVP4Ry/zZCVU6",
@@ -28,6 +29,7 @@ module.exports = async () => {
 		{
 			id: "7f28c5f9-d711-4cd6-ac15-d13d71abuu55",
 			name: "Admin User",
+			surname: "test surname",
 			email: "admin.user@test.be",
 			password_hash:
 				"$2a$16$dSOaY4MOYDbZffVgDOKUs./r76jOhKTtxyTTNf6QsVP4Ry/zZCVU6",

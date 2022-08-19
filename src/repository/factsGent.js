@@ -34,7 +34,7 @@ const create = async ({ title, factText }) => {
 		return findById(id);
 	} catch (error) {
 		const logger = getChildLogger("factsGent-repo");
-		logger.error("Error in create", { error });
+		logger.error("Error in create" , { error }); //
 		throw error;
 	}
 };
@@ -46,7 +46,7 @@ const updateById = async (id, title, factText) => {
 		return await findById(id);
 	} catch (error) {
 		const logger = getChildLogger("factsGent-repo");
-		logger.error("Error in updateById", { error });
+		logger.error("Error in updateById" , { error }); //
 		throw error;
 	}
 };

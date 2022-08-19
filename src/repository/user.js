@@ -40,7 +40,7 @@ const create = async ({
 		return findById(id);
 	} catch (error) {
 		const logger = getChildLogger("users-repo");
-		logger.error("Error in create", { error });
+		logger.error("Error in create", { error }); //
 		throw error;
 	}
 };
@@ -59,7 +59,7 @@ const updateById = async (id, { surname, name, email, phonenumber }) => {
 		return await findById(id);
 	} catch (error) {
 		const logger = getChildLogger("users-repo");
-		logger.error("Error in updateByid", { error });
+		logger.error("Error in updateByid", { error }); //
 		throw error;
 	}
 };
@@ -76,7 +76,7 @@ const deleteById = async (id) => {
 		return rowAffected > 0;
 	} catch (error) {
 		const logger = getChildLogger("users-repo");
-		logger.error("Error in deleteById", { error });
+		logger.error("Error in deleteById", { error }); //
 		throw error;
 	}
 };

@@ -24,7 +24,7 @@ const generateJWT = (user) => {
 	return new Promise((resolve, reject) => {
 		jwt.sign(tokenData, JWT_SECRET, signOptions, (err, token) => {
 			if (err) {
-				console.log("Error while signing new token:", err.message);
+				console.log("Error while signing new token:", err.message); //
 				return reject(err);
 			}
 			return resolve(token);
@@ -42,7 +42,7 @@ const verifyJWT = (authToken) => {
 	return new Promise((resolve, reject) => {
 		jwt.verify(authToken, JWT_SECRET, verifyOptions, (err, decodedToken) => {
 			if (err || !decodedToken) {
-				console.log("Error while verifying token:", err.message);
+				console.log("Error while verifying token:", err.message); //
 				return reject(
 					err | ServiceError.unauthorized("Token could not be parsed")
 				);

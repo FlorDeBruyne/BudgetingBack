@@ -33,7 +33,7 @@ const create = async ({ name }) => {
 		return findById(id);
 	} catch (error) {
 		const logger = getChildLogger("category-repo");
-		logger.error("Error in create", { error });
+		logger.error("Error in create" , { error });//
 		throw error;
 	}
 };
@@ -45,7 +45,7 @@ const updateById = async (id, name) => {
 		return await findById(id);
 	} catch (error) {
 		const logger = getChildLogger("category-repo");
-		logger.error("Error in updateById", { error });
+		logger.error("Error in updateById" , { error });//
 		throw error;
 	}
 };

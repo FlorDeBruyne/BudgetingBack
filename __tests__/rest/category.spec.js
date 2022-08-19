@@ -1,15 +1,25 @@
 const { tables } = require("../../src/data");
 const { withServer, login } = require("../supertest.setup");
 
-const data = [
-	{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd83", name: "Housing" },
-	{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd84", name: "transportation" },
-	{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd85", name: "Food" },
-	{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd86", name: "Utilities" },
-	{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd87", name: "Insurance" },
-];
+const data = {
+	categorys: [
+		{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd83", name: "Housing" },
+		{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd84", name: "transportation" },
+		{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd85", name: "Food" },
+		{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd86", name: "Utilities" },
+		{ id: "7f28c5f9-d711-4cd6-ac15-d13d71abfd87", name: "Insurance" },
+	],
+};
 
-const dataToDelete = {};
+const dataToDelete = {
+	categorys: [
+		"7f28c5f9-d711-4cd6-ac15-d13d71abfd83",
+		"7f28c5f9-d711-4cd6-ac15-d13d71abfd84",
+		"7f28c5f9-d711-4cd6-ac15-d13d71abfd85",
+		"7f28c5f9-d711-4cd6-ac15-d13d71abfd86",
+		"7f28c5f9-d711-4cd6-ac15-d13d71abfd87",
+	],
+};
 
 describe("Categorys", () => {
 	let request;

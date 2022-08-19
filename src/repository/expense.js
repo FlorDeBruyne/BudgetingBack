@@ -24,7 +24,7 @@ const findById = async (id) => {
 			"=",
 			`${tables.expense}.categoryId`
 		)
-		.where(	tables.expense+".id", id);
+		.where(tables.expense + ".id", id);
 };
 
 const findByName = async (name) => {
@@ -50,7 +50,7 @@ const create = async ({ amount, name, categoryId, date, placeId }) => {
 		return await findById(id);
 	} catch (error) {
 		const logger = getChildLogger("expense-repo");
-		logger.error("Error in create", { error });
+		logger.error("Error in create", { error }); //
 		throw error;
 	}
 };
@@ -68,7 +68,7 @@ const updateById = async (id, { amount, name, categoryId, date, placeId }) => {
 			.where("id", id);
 	} catch (error) {
 		const logger = getChildLogger("expense-repo");
-		logger.error("Error in updateById", { error });
+		logger.error("Error in updateById", { error }); //
 		throw error;
 	}
 };
@@ -82,7 +82,7 @@ const deleteById = async (id) => {
 		return rowAffected > 0;
 	} catch (error) {
 		const logger = getChildLogger("expense-repo");
-		logger.error("Error in deleteById", { error });
+		logger.error("Error in deleteById", { error }); //
 		throw error;
 	}
 };

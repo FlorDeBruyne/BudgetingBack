@@ -3,7 +3,7 @@ const config = require("config");
 const koaCors = require("@koa/cors");
 const bodyParser = require("koa-bodyparser");
 const { initializeLogger, getLogger } = require("./core/logger");
-const { initializeData } = require("./data");
+const { initializeData, shutdownData } = require("./data");
 const installRest = require("./rest");
 const { serializeError } = require("serialize-error");
 const ServiceError = require("./core/serviceError");
@@ -13,17 +13,17 @@ const { koaSwagger } = require("koa2-swagger-ui");
 const swaggerOptions = require("../swagger.config");
 
 const NODE_ENV = process.env.NODE_ENV; // doesn't work  config.get("env")
-const CORS_ORIGINS = config.get("cors.origins");
-const CORS_MAX_AGE = config.get("cors.maxAge");
-const LOG_LEVEL = config.get("log.level");
-const LOG_DISABLED = config.get("log.disabled");
+const CORS_ORIGINS = "http://localhost:3000"; //config.get("cors.origins");
+const CORS_MAX_AGE = 3 * 60 * 60; //config.get("cors.maxAge");
+const LOG_LEVEL = "silly"; //config.get("log.level");
+// const LOG_DISABLED = config.get("log.disabled");
 
 module.exports = async function createServer() {
 	initializeLogger({
 		level: LOG_LEVEL,
-		disabled: LOG_DISABLED,
-		isProduction: NODE_ENV === "production",
-		defaultMeta: { NODE_ENV },
+		// disabled: LOG_DISABLED,
+		// isProduction: NODE_ENV === "production",
+		name: "creatingServer",
 	});
 
 	await initializeData();
@@ -80,8 +80,9 @@ module.exports = async function createServer() {
 			);
 		} catch (error) {
 			logger.error(
-				`${getStatusMessage()} ${ctx.method} ${ctx.status} ${ctx.url}`,
-				{ error }
+				`${getStatusMessage()} ${ctx.method} ${ctx.status} ${
+					(ctx.url, { error })
+				}` //
 			);
 			throw error;
 		}
@@ -98,40 +99,40 @@ module.exports = async function createServer() {
 				};
 			}
 		} catch (error) {
-			logger.info(ctx.body)
+			logger.info(ctx.body);
 			logger.error("Error occured while handling a request", {
 				error: serializeError(error),
 			});
 		}
 
-		// let statusCode = error.status || 500;
-		// let errorBody = {
-		// 	code: error.code || "INTERNAL_SERVER_ERROR",
-		// 	message: error.message,
-		// 	details: error.details || {},
-		// 	stack: NODE_ENV !== "production" ? error.stack : undefined,
-		// };
+		let statusCode = error.status || 500;
+		let errorBody = {
+			code: error.code || "INTERNAL_SERVER_ERROR",
+			message: error.message,
+			details: error.details || {},
+			stack: NODE_ENV !== "production" ? error.stack : undefined,
+		};
 
-		// if (error instanceof ServiceError) {
-		// 	if (error.isNotFound) {
-		// 		statusCode = 404;
-		// 	}
+		if (error instanceof ServiceError) {
+			if (error.isNotFound) {
+				statusCode = 404;
+			}
 
-		// 	if (error.isValidationFailed) {
-		// 		statusCode = 400;
-		// 	}
+			if (error.isValidationFailed) {
+				statusCode = 400;
+			}
 
-		// 	if (error.isUnauthorized) {
-		// 		statusCode = 401;
-		// 	}
+			if (error.isUnauthorized) {
+				statusCode = 401;
+			}
 
-		// 	if (error.isForbidden) {
-		// 		statusCode = 403;
-		// 	}
-		// }
+			if (error.isForbidden) {
+				statusCode = 403;
+			}
+		}
 
-		// ctx.status = statusCode;
-		// ctx.body = errorBody;
+		ctx.status = statusCode;
+		ctx.body = errorBody;
 	});
 
 	installRest(app);
@@ -154,7 +155,7 @@ module.exports = async function createServer() {
 			{
 				app.removeAllListeners();
 				await shutdownData();
-				getLogger().info("Goodbye");
+				logger.info("Goodbye");
 			}
 		},
 	};
